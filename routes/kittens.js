@@ -18,6 +18,7 @@ router.post('/', (req, res, next) => {
 router.put('/:id', (req, res, next) => {
   const id = req.params.id;
   const kitten = req.body.kitten;
+  console.log(kitten)
   Kitten.update({_id: id}, kitten)
     .then( result => res.json(result) )
     .catch(next);

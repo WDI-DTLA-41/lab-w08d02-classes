@@ -1,6 +1,5 @@
 var mongoose = require('mongoose');
 mongoose.Promise = Promise;
-
 const url = process.env.MONGODB_URI || 'mongodb://localhost/sandbox';
 mongoose.connect(url);
 

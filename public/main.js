@@ -14,16 +14,43 @@ class Kitten {
     this._attributes[key] = newValue;
   }
   save() {
-      $.put(`/kittens/${this._attributes._id}`, {kitten: this._attributes},function(resp){
-        console.log(`${this._attributes.name} has been updated/saved!`);
+    $.ajax({
+      url: `/kittens`,
+      type: 'POST',
+      data: {kitten: {name: this._attributes.name, _id: this._attributes._id}}
+    }).then(function(){
+        console.log('Created!');
       });
   }
-  remove() {
-    $.delete(`/kittens/${this._attributes._id}`, {kitten: this._attributes},function(resp){
-      console.log(`${this._attributes.name} has been deleted!`);
-    });
+  update(key, newValue) {
+    if (key === 'name'){
+      $.ajax({
+        url: `/kittens/${this._attributes._id}`,
+        type: 'PUT',
+        data: {kitten: { name: newValue}}
+      }).then(function(){
+          console.log('Updated!');
+        });
+    }
+    if (key === '_id'){
+      $.ajax({
+        url: `/kittens/${this._attributes._id}`,
+        type: 'PUT',
+        data: {kitten: { '_id': newValue}}
+      }).then(function(){
+          console.log('Updated!');
+        });
+    }
   }
-  static create(newKitten) {
+  remove() {
+    $.ajax({
+      url: `/kittens/${this._attributes._id}`,
+      type: 'DELETE',
+    }).then(function(){
+        console.log('Deleted!');
+      });
+  }
+  static creates(newKitten) {
     $.post('/kittens', {kitten: newKitten}, function(resp){
       console.log(`Created ${newKitten.name}`);
     });
@@ -36,7 +63,9 @@ console.log(kitten.get('name'));
 console.log(kitten.get('_id'));
 kitten.set('name', 'Mr.Bigglesworth');
 console.log(kitten.get('name'));
-kitten.save();
+// kitten.save();
+// kitten.update('name', 'Tommy');
+// kitten.remove();
 // Kitten.create({name: 'Gertrude'});
 
 

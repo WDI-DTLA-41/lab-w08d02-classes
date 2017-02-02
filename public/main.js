@@ -3,6 +3,7 @@ console.log('🐱');
 class Kitten {
   constructor(details){
     this._attributes = details;
+    this._dataStorage = [];
   }
   meow(){
     console.log(`${this._attributes.name} says 'meow'`);
@@ -14,13 +15,15 @@ class Kitten {
     this._attributes[key] = newValue;
   }
   save() {
-    $.ajax({
-      url: `/kittens`,
-      type: 'POST',
-      data: {kitten: {name: this._attributes.name, _id: this._attributes._id}}
-    }).then(function(){
-        console.log('Created!');
-      });
+    Kitten.create({name: this._attributes.name});
+    // console.log( Kitten.prototype._id);
+    // $.ajax({
+    //   url: `/kittens`,
+    //   type: 'POST',
+    //   data: {kitten: {name: this._attributes.name, _id: this._attributes._id}}
+    // }).then(function(){
+    //     console.log('Created!');
+    //   });
   }
   update(key, newValue) {
     if (key === 'name'){
@@ -50,10 +53,27 @@ class Kitten {
         console.log('Deleted!');
       });
   }
-  static creates(newKitten) {
+  static create(newKitten) {
     $.post('/kittens', {kitten: newKitten}, function(resp){
-      console.log(`Created ${newKitten.name}`);
+      // console.log(`Created ${newKitten.name}`);
+      // Kitten.prototype._id = resp._id;
     });
+  }
+  static fetch() {
+    $.get('/kittens', function(resp){
+      this._dataStorage = resp;
+      return this._dataStorage;
+    });
+  }
+  static all() {
+    return this.fetch();
+  }
+  static first(){
+    return this._dataStorage[0];
+  }
+
+  static last(){
+    return this._dataStorage[ this._dataStorage.length - 1 ];
   }
 }
 
@@ -67,5 +87,8 @@ console.log(kitten.get('name'));
 // kitten.update('name', 'Tommy');
 // kitten.remove();
 // Kitten.create({name: 'Gertrude'});
-
-
+// Kitten.create({name: 'Mike'});
+// Kitten.fetch();
+// Kitten.all();
+// Kitten.first();
+// Kitten.last();
